@@ -48,22 +48,25 @@ public class Structured {
 				list = getContent(file);
 				logCount += list.size();
 				for (int i = 0; i < list.size(); i++) {
-					String[] recordArr = list.get(i).split(" |,|: ");
+//					String[] recordArr = list.get(i).split(" |,|: ");
+					String[] recordArr = list.get(i).split("  | |: ");
 					document = new Document();
 					document.add(new TextField("id", i + "", Field.Store.YES));
 					document.add(new Field("timeStamp", recordArr[0] + " "
-							+ recordArr[1], Field.Store.YES,
+							+ recordArr[1] + recordArr[2], Field.Store.YES,
 							Field.Index.ANALYZED));
-					document.add(new TextField("processID", recordArr[2],
-							Field.Store.YES));
-					document.add(new TextField("level", recordArr[3],
-							Field.Store.YES));
-					if (i % 2 == 0)
-						document.add(new Field("ip", "192.168.8.190",
-								Field.Store.YES, Field.Index.ANALYZED));
-					if (i % 2 == 1)
-						document.add(new Field("ip", "192.168.8.191",
-								Field.Store.YES, Field.Index.ANALYZED));
+					document.add(new Field("host", recordArr[3],
+							Field.Store.YES, Field.Index.ANALYZED));
+//					document.add(new TextField("processID", recordArr[4],
+//							Field.Store.YES));
+//					document.add(new TextField("level", recordArr[3],
+//							Field.Store.YES));
+//					if (i % 2 == 0)
+//						document.add(new Field("ip", "192.168.8.190",
+//								Field.Store.YES, Field.Index.ANALYZED));
+//					if (i % 2 == 1)
+//						document.add(new Field("ip", "192.168.8.191",
+//								Field.Store.YES, Field.Index.ANALYZED));
 					document.add(new TextField("source", recordArr[4],
 							Field.Store.YES));
 					String message = "";
@@ -109,11 +112,17 @@ public class Structured {
 
 	// 读日志文件
 	public static List<String> getContent(File file) throws Exception {
+//		Pattern p = Pattern
+//				.compile(
+//						"^(\\d{1,4}[-|\\/|年|\\.]\\d{1,2}[-|\\/|月|\\.]\\d{1,2}([日|号])?(\\s)*(\\d{1,2}([点|时])?((:)?\\d{1,2}(分)?((:)?\\d{1,2}(秒)?)?)?)?(\\s)*(PM|AM)?)",
+//						Pattern.CASE_INSENSITIVE | Pattern.MULTILINE);
+		//日志样本
+//		Jan  1 19:47:45 bigdata-ganglia-ser02 ntpd[2407]: 0.0.0.0 06d8 08 no_sys_peer
+//		Jan  2 00:38:27 bigdata-ganglia-ser02 xinetd[2394]: START: nrpe pid=26820 from=10.93.122.36
 		Pattern p = Pattern
 				.compile(
-						"^(\\d{1,4}[-|\\/|年|\\.]\\d{1,2}[-|\\/|月|\\.]\\d{1,2}([日|号])?(\\s)*(\\d{1,2}([点|时])?((:)?\\d{1,2}(分)?((:)?\\d{1,2}(秒)?)?)?)?(\\s)*(PM|AM)?)",
+						"^((Jan|Feb|Mar|Apr|May|June|July|Aug|Sept|Oct|Nov|Dec){1}(\\s)*\\d{1,2}(\\s)*\\d{2}:\\d{2}:\\d{2})",
 						Pattern.CASE_INSENSITIVE | Pattern.MULTILINE);
-
 		BufferedReader br = new BufferedReader(new InputStreamReader(
 				new FileInputStream(file), "UTF-8"));
 		String tempLine = "";
@@ -132,6 +141,7 @@ public class Structured {
 					}
 					contents.add(curLine);
 				} else {
+					System.out.println("第"+contents.size()+"行，开头时间格式错误！");
 					tempLine += curLine;
 				}
 			} else {

@@ -10,7 +10,7 @@ public class Run {
 		ApriorilesEnd.main(null);
 		SelectRules.main(null);
 		ResultAnalyze.main(null);
-		Change.main(null);
+//		Change.main(null);
 		System.out.println("end.......");
 	}
 }

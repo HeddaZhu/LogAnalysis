@@ -9,11 +9,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
@@ -35,8 +31,11 @@ import training.COMMON_PATH;
 
 public class LogMerge {
 
+//	public static SimpleDateFormat DATE_TEMPLATE = new SimpleDateFormat(
+//			"yyyy-MM-dd HH:mm:ss");
 	public static SimpleDateFormat DATE_TEMPLATE = new SimpleDateFormat(
-			"yyyy-MM-dd HH:mm:ss");
+		"MMM d hh:mm:ss 'GMT'Z (z)", Locale.ENGLISH);
+
 	public static Set<String> REMOVED_LABEL_SET = new HashSet<String>();
 	public static List<String[]> TIME_LABEL_LIST = new ArrayList<String[]>();
 	public static Set<String> IP_SET = new HashSet<String>();
